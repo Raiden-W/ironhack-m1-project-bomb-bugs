@@ -4,13 +4,13 @@ const bombImg = new Image();
 const boomEffectImg = new Image();
 const bugImgs = [];
 
-bgWallImg.src = "/src/images/wall-small.jpg";
-blockImg.src = "/src/images/wooden-log.png";
-bombImg.src = "/src/images/bomb.png";
-boomEffectImg.src = "/src/images/boom.png";
+bgWallImg.src = "src/images/wall-small.jpg";
+blockImg.src = "src/images/wooden-log.png";
+bombImg.src = "src/images/bomb.png";
+boomEffectImg.src = "src/images/boom.png";
 
 for (let i = 0; i < 6; i++) {
 	const bugImg = new Image();
-	bugImg.src = `/src/images/bug${i + 1}.png`;
+	bugImg.src = `src/images/bug${i + 1}.png`;
 	bugImgs.push(bugImg);
 }
