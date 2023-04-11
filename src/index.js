@@ -1,3 +1,5 @@
+//test
+
 let blocks = [];
 let limitedBlockNum = 1;
 
@@ -10,7 +12,7 @@ let targetsRemoved = [];
 let hitAmount = 0;
 let hitGoal = 0;
 let winCurrLevel = false;
-let currLevel = 1;
+let currLevel = git1;
 
 let animateId;
 let finalWin = false;
