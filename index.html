@@ -9,13 +9,38 @@
 	</head>
 	<body>
 		<div class="game-intro">
-			<button id="start-button">StartGame</button>
-			<p>Use your mouse to add logs, bouncing the boombs to kill the bugs!</p>
+			<h2>BOOOOOMB THE BUGS!!!</h2>
+			<p>Wisely use your logs~</p>
+			<ul>
+				<li>Move your mouse and click to place a wooden log.</li>
+				<li>Adjust the angle of your log before second click.</li>
+				<li>Bounce the bombs and change their trajectory.</li>
+				<li>You only have limited amount of logs and limited time!</li>
+				<li>
+					Draw the latest log back if you feel you didn't make a right decision.
+				</li>
+				<li>Bomb all the bugs!</li>
+			</ul>
+			<div>
+				<label for="level-choice">Beginning level</label>
+				<select name="levels" id="level-choice">
+					<option value="1">Level 1</option>
+					<option value="2">Level 2</option>
+					<option value="3">Level 3</option>
+					<!-- <option value="4">Level 4</option>
+					<option value="5">Level 5</option>
+					<option value="6">Level 6</option>
+					<option value="7">Level 7</option> -->
+				</select>
+			</div>
+			<button id="start-button">Start Game</button>
 		</div>
 		<div id="game-board">
 			<canvas id="game-info" width="100" height="800"></canvas>
 			<canvas id="game-canvas" width="1200" height="800"></canvas>
-			<div id="buttons-list"></div>
+			<div id="buttons-list">
+				<p>CLEAN LOGS</p>
+			</div>
 		</div>
 		<script src="src/resources.js"></script>
 		<script src="src/class.js"></script>

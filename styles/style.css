@@ -4,18 +4,60 @@ body {
 	padding: 0;
 	margin: 0;
 	text-align: center;
-	/* overflow: hidden; */
 }
 
-canvas {
-	/* background-color: black; */
-	border: 1px solid black;
-	padding: 0;
-	margin: 0 auto;
+ul {
+	list-style-type: none;
 }
 
 #game-board {
 	width: 100%;
 	padding: 0 auto;
 	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+#game-info,
+#game-canvas,
+#buttons-list {
+	margin: 0;
+}
+
+#game-canvas {
+	border-left: 0;
+	border-right: 0;
+}
+
+#game-info {
+	background-color: #361c1b;
+}
+
+#buttons-list {
+	width: 100px;
+	height: 800px;
+	background-color: #361c1b;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+#buttons-list p {
+	text-align: center;
+	font-weight: bold;
+	font-size: 10px;
+	width: 100%;
+	background-color: #ddad81;
+	margin: 0;
+	padding: 5px 0 8px 0;
+	color: #5c2911;
+}
+
+canvas,
+#buttons-list {
+	border: 3px solid black;
+	padding: 0;
+	margin: 0;
+	display: none;
 }

@@ -11,8 +11,11 @@ let hitAmount = 0;
 let hitGoal = 0;
 let winCurrLevel = false;
 let currLevel = 1;
+let timeOfLevel = 30;
+let timeLeft = timeOfLevel;
 
 let animateId;
+let intervelId;
 let finalWin = false;
 let gameOver = false;
 
@@ -23,10 +26,8 @@ let mouseY = 0;
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
 const gamePanel = document.querySelector("#game-info");
-const ctxPanel = canvas.getContext("2d");
-canvas.style.display = "none";
-gamePanel.style.display = "none";
-
+const ctxPanel = gamePanel.getContext("2d");
+const buttonsFrameHtml = document.querySelector("#buttons-list");
 const gameIntro = document.querySelector(".game-intro");
 
 //responsive mouse position
@@ -42,6 +43,7 @@ const startGame = () => {
 	gameIntro.style.display = "none";
 	canvas.style.display = "inline";
 	gamePanel.style.display = "inline";
+	buttonsFrameHtml.style.display = "flex";
 
 	resetLevel(levelParams[currLevel - 1]);
 
@@ -110,8 +112,11 @@ const animate = () => {
 		targetsRemoved[0].drawBoom();
 	}
 
+	drawInfoBar();
+
 	if (hitAmount === hitGoal) {
 		hitAmount = 0;
+		clearInterval(intervelId);
 		setTimeout(() => {
 			winCurrLevel = true;
 		}, 2000);
@@ -121,19 +126,42 @@ const animate = () => {
 	if (winCurrLevel) {
 		if (currLevel < levelParams.length) {
 			currLevel += 1;
+
+			cleanAllAssets();
 			resetLevel(levelParams[currLevel - 1]);
-			winCurrLevel = false;
 		} else {
 			finalWin = true;
 		}
+
+		winCurrLevel = false;
 	}
 
 	if (finalWin) {
 		console.log("FINAL WIN!!!");
 		cancelAnimationFrame(animateId);
+		clearInterval(intervelId);
+		cleanAllAssets();
+		finalWinText();
+		setTimeout(() => {
+			canvas.style.display = "none";
+			gamePanel.style.display = "none";
+			gameIntro.style.display = "block";
+			buttonsFrameHtml.style.display = "none";
+			finalWin = false;
+		}, 3500);
 	} else if (gameOver) {
 		console.log("TIME OVER!!!");
 		cancelAnimationFrame(animateId);
+		clearInterval(intervelId);
+		cleanAllAssets();
+		gameOverText();
+		setTimeout(() => {
+			canvas.style.display = "none";
+			gamePanel.style.display = "none";
+			gameIntro.style.display = "block";
+			buttonsFrameHtml.style.display = "none";
+			gameOver = false;
+		}, 3500);
 	} else animateId = requestAnimationFrame(animate);
 };
 
@@ -141,16 +169,10 @@ const resetLevel = (currlevelParams) => {
 	hitGoal = currlevelParams.candyNum;
 	hitAmount = 0;
 
+	timeOfLevel = currlevelParams.limitedTime;
+	timeLeft = timeOfLevel;
 	limitedBlockNum = currlevelParams.limitedBlockNum;
 	candyNum = currlevelParams.candyNum;
-
-	targetsRemoved = [];
-	candysRemoved = [];
-	candys = [];
-	blocks.forEach((block) => {
-		block.cleanNode();
-	});
-	blocks = [];
 
 	for (let i = 0; i < candyNum; i++) {
 		setTimeout(() => {
@@ -163,6 +185,22 @@ const resetLevel = (currlevelParams) => {
 			new Target(currlevelParams.targets[i].x, currlevelParams.targets[i].y)
 		);
 	}
+
+	intervelId = setInterval(() => {
+		timeLeft -= 0.5;
+		if (timeLeft <= 0) gameOver = true;
+	}, 500);
+};
+
+const cleanAllAssets = () => {
+	targetsRemoved = [];
+	candysRemoved = [];
+	candys = [];
+	targets = [];
+	blocks.forEach((block) => {
+		block.cleanNode();
+	});
+	blocks = [];
 };
 
 const removeEleInBlocks = () => {
@@ -179,7 +217,6 @@ const removeEleInBlocks = () => {
 		candys.push(candysRemoved[0]);
 		targets.push(targetsRemoved[0]);
 
-		// console.log(hitAmount, targetsRemoved);
 		candysRemoved.shift();
 		targetsRemoved.shift();
 		hitAmount -= 1;
@@ -188,12 +225,157 @@ const removeEleInBlocks = () => {
 
 const onlyLastBlockRemovable = () => {
 	blocks.forEach((block, index) => {
-		if (index === 0) block.node.disabled = false;
-		else block.node.disabled = true;
+		if (index === 0) {
+			block.node.disabled = false;
+			block.node.style.backgroundColor = "#5c2911";
+		} else {
+			block.node.disabled = true;
+			block.node.style.backgroundColor = "#361c1b";
+		}
 	});
 };
 
+const finalWinText = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(bgWallImg, 0, 0, canvas.width, canvas.height);
+	ctx.textAlign = "center";
+	ctx.font = "bold 50px sans-serif";
+	ctx.fillStyle = "yellow";
+	ctx.fillText(`All Bugs Cleaned!`, canvas.width / 2, canvas.height / 2 - 70);
+	ctx.fillStyle = "white";
+	ctx.fillText(
+		`Your have nailed this game`,
+		canvas.width / 2,
+		canvas.height / 2
+	);
+	ctx.fillText(
+		`and passed all ${currLevel} levels`,
+		canvas.width / 2,
+		canvas.height / 2 + 70
+	);
+};
+
+const gameOverText = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(bgWallImg, 0, 0, canvas.width, canvas.height);
+	ctx.textAlign = "center";
+	ctx.font = "bold 50px sans-serif";
+	ctx.fillStyle = "yellow";
+	ctx.fillText(`Time Is Up!`, canvas.width / 2, canvas.height / 2 - 70);
+	ctx.fillStyle = "white";
+	ctx.fillText(
+		`You failed to clean all the bugs of level ${currLevel}.`,
+		canvas.width / 2,
+		canvas.height / 2
+	);
+};
+
+const gradient1 = ctxPanel.createLinearGradient(50, 0, 100, 0);
+gradient1.addColorStop(0.3, "#7d4523");
+gradient1.addColorStop(1, "white");
+const gradient2 = ctxPanel.createLinearGradient(0, 0, 50, 0);
+gradient2.addColorStop(0.4, "#6666A3");
+gradient2.addColorStop(1, "white");
+
+const drawInfoBar = () => {
+	const offsetHeight = 50;
+	const offsetSide = 5;
+	const barHeight = gamePanel.height - offsetHeight * 2;
+
+	const currBarTimeHeight = (timeLeft / timeOfLevel) * barHeight;
+
+	ctxPanel.clearRect(0, 0, gamePanel.width, gamePanel.height);
+
+	ctxPanel.beginPath();
+	ctxPanel.roundRect(
+		gamePanel.width / 2 + offsetSide,
+		offsetHeight,
+		gamePanel.width / 2 - offsetSide * 2,
+		barHeight,
+		[10]
+	);
+	ctxPanel.lineWidth = "5";
+	ctxPanel.stroke();
+	ctxPanel.fillStyle = "#151414";
+	ctxPanel.fill();
+	ctxPanel.closePath();
+
+	ctxPanel.beginPath();
+	ctxPanel.roundRect(
+		gamePanel.width / 2 + offsetSide,
+		offsetHeight + (barHeight - currBarTimeHeight),
+		gamePanel.width / 2 - offsetSide * 2,
+		currBarTimeHeight,
+		[10]
+	);
+
+	ctxPanel.lineWidth = "5";
+	ctxPanel.stroke();
+	ctxPanel.fillStyle = gradient1;
+	ctxPanel.fill();
+	ctxPanel.closePath();
+
+	const currBarTargetHeight =
+		((hitGoal - targetsRemoved.length) / hitGoal) * barHeight;
+
+	ctxPanel.beginPath();
+	ctxPanel.roundRect(
+		offsetSide,
+		offsetHeight,
+		gamePanel.width / 2 - offsetSide * 2,
+		barHeight,
+		[10]
+	);
+	ctxPanel.lineWidth = "5";
+	ctxPanel.stroke();
+	ctxPanel.fillStyle = "#151414";
+	ctxPanel.fill();
+	ctxPanel.closePath();
+
+	ctxPanel.beginPath();
+	ctxPanel.roundRect(
+		offsetSide,
+		offsetHeight + (barHeight - currBarTargetHeight),
+		gamePanel.width / 2 - offsetSide * 2,
+		currBarTargetHeight,
+		[10]
+	);
+	ctxPanel.lineWidth = "5";
+	ctxPanel.stroke();
+	ctxPanel.fillStyle = gradient2;
+	ctxPanel.fill();
+	ctxPanel.closePath();
+
+	if (targets.length !== 0) {
+		ctxPanel.drawImage(
+			targets[0].bugImg,
+			offsetSide,
+			gamePanel.height - offsetHeight + offsetSide,
+			gamePanel.width / 2 - offsetSide * 2,
+			offsetHeight - offsetSide * 2
+		);
+	}
+
+	ctxPanel.drawImage(
+		clockImg,
+		gamePanel.width / 2 + offsetSide,
+		gamePanel.height - offsetHeight + offsetSide,
+		gamePanel.width / 2 - offsetSide * 2,
+		offsetHeight - offsetSide * 2
+	);
+
+	ctxPanel.textAlign = "center";
+	ctxPanel.font = "bold 20px sans-serif";
+	ctxPanel.fillStyle = "#ddad81";
+	ctxPanel.fillText(
+		`LEVEL ${currLevel}`,
+		gamePanel.width / 2,
+		offsetHeight / 2 + offsetSide
+	);
+};
+
 document.getElementById("start-button").onclick = () => {
+	currLevel = Number(document.querySelector("#level-choice").value);
 	startGame();
 };
 

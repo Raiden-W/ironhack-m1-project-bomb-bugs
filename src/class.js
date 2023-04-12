@@ -66,8 +66,15 @@ class Block {
 
 	addNode() {
 		document.querySelector("#buttons-list").appendChild(this.node);
+		this.node.innerText = "Log X";
 		this.node.style.width = "100px";
-		this.node.style.height = "30px";
+		this.node.style.height = "50px";
+		this.node.style.fontSize = "22px";
+		this.node.style.fontWeight = "bold";
+		this.node.style.backgroundColor = "#5c2911";
+		this.node.style.color = "#ddad81";
+		this.node.style.border = "solid 1px #ddad81";
+		console.dir(this.node);
 		this.node.addEventListener("click", () => {
 			this.removeThis = true;
 			this.line = new Path2D();
