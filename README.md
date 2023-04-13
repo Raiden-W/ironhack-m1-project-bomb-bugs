@@ -97,7 +97,7 @@ Ironhack Module 1 Project.
 - checkHit () {}
 - drawBoom() {}
 
-## States y States Transitions
+## States Transitions
 
 Definition of the different states and their transition (transition functions)
 
