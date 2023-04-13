@@ -69,8 +69,7 @@ class Block {
 		this.node.innerText = "Log X";
 		this.node.style.width = "100px";
 		this.node.style.height = "50px";
-		this.node.style.fontSize = "22px";
-		this.node.style.fontWeight = "bold";
+		this.node.style.font = "bold 22px 'Crete Round'";
 		this.node.style.backgroundColor = "#5c2911";
 		this.node.style.color = "#ddad81";
 		this.node.style.border = "solid 1px #ddad81";
@@ -101,6 +100,8 @@ class Candy {
 			y: -this.radius,
 		};
 		this.isCollide = false;
+		this.hasPlayedSound = false;
+		this.angle = 0;
 	}
 
 	drawCandy() {
@@ -109,13 +110,33 @@ class Candy {
 		// ctx.fillStyle = "rgb(200, 150, 80)";
 		// ctx.fill();
 		// ctx.closePath;
+
+		ctx.translate(this.pos.x, this.pos.y);
+		ctx.rotate(-this.angle);
+		this.angle += 0.1;
 		ctx.drawImage(
 			bombImg,
-			this.pos.x - this.radius * 2,
-			this.pos.y - this.radius * 2,
+			-this.radius * 2,
+			-this.radius * 2,
 			this.radius * 4,
 			this.radius * 4
 		);
+		ctx.translate(-this.pos.x, -this.pos.y);
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+		const pipeSize = 100;
+		ctx.drawImage(
+			pipeImg,
+			this.x - pipeSize / 2,
+			-pipeSize / 2,
+			pipeSize,
+			pipeSize
+		);
+
+		if (this.pos.y > canvas.height * 0.6 && !this.hasPlayedSound) {
+			whooshSound.play();
+			this.hasPlayedSound = true;
+		}
 	}
 
 	updatePos() {
@@ -148,6 +169,7 @@ class Candy {
 		this.force = { x: 0, y: 0 };
 		this.acc = { x: 0, y: 0 };
 		this.vel = { x: 0, y: 0 };
+		this.hasPlayedSound = false;
 	}
 
 	collide(block) {
@@ -173,6 +195,7 @@ class Target {
 		this.radius = 40;
 		this.isHit = false;
 		this.isBoomming = false;
+		this.t = Math.random() * Math.PI * 2;
 
 		this.bugImg = bugImgs[Math.floor(bugImgs.length * Math.random())];
 	}
@@ -185,10 +208,13 @@ class Target {
 		// ctx.stroke();
 		// ctx.closePath;
 
+		const yOffset = Math.cos(this.t) * 1.5;
+		this.t += 0.5;
+
 		ctx.drawImage(
 			this.bugImg,
 			this.x - this.radius,
-			this.y - this.radius,
+			this.y - this.radius + yOffset,
 			this.radius * 2,
 			this.radius * 2
 		);

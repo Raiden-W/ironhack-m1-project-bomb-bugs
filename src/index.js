@@ -18,6 +18,7 @@ let animateId;
 let intervelId;
 let finalWin = false;
 let gameOver = false;
+let displayCurrLevel = false;
 
 let clickAmount = 0;
 let mouseX = 0;
@@ -28,7 +29,7 @@ const ctx = canvas.getContext("2d");
 const gamePanel = document.querySelector("#game-info");
 const ctxPanel = gamePanel.getContext("2d");
 const buttonsFrameHtml = document.querySelector("#buttons-list");
-const gameIntro = document.querySelector(".game-intro");
+const gameIntro = document.querySelector("#game-intro");
 
 //responsive mouse position
 const getMousePos = (canvas, event) => {
@@ -72,6 +73,7 @@ const animate = () => {
 					if (block.checkCollision(candy)) {
 						candy.isCollide = true;
 						candy.collide(block);
+						bounceSound.play();
 					}
 				});
 			}
@@ -100,6 +102,8 @@ const animate = () => {
 						candysRemoved.unshift(currCandyRemoved);
 						targetsRemoved.unshift(currTargetRemoved);
 
+						explosionSound.play();
+
 						hitAmount += 1;
 					}
 				});
@@ -110,6 +114,10 @@ const animate = () => {
 	//drawBoom
 	if (targetsRemoved.length !== 0) {
 		targetsRemoved[0].drawBoom();
+	}
+
+	if (displayCurrLevel) {
+		drawCurrLevelCanvas();
 	}
 
 	drawInfoBar();
@@ -142,26 +150,32 @@ const animate = () => {
 		clearInterval(intervelId);
 		cleanAllAssets();
 		finalWinText();
+		bgAudio.pause();
+		finalWinSound.play();
 		setTimeout(() => {
 			canvas.style.display = "none";
 			gamePanel.style.display = "none";
-			gameIntro.style.display = "block";
+			gameIntro.style.display = "flex";
 			buttonsFrameHtml.style.display = "none";
+			bgAudio.play();
 			finalWin = false;
-		}, 3500);
+		}, 5000);
 	} else if (gameOver) {
 		console.log("TIME OVER!!!");
 		cancelAnimationFrame(animateId);
 		clearInterval(intervelId);
 		cleanAllAssets();
 		gameOverText();
+		bgAudio.pause();
+		gameOverSound.play();
 		setTimeout(() => {
 			canvas.style.display = "none";
 			gamePanel.style.display = "none";
-			gameIntro.style.display = "block";
+			gameIntro.style.display = "flex";
 			buttonsFrameHtml.style.display = "none";
+			bgAudio.play();
 			gameOver = false;
-		}, 3500);
+		}, 5000);
 	} else animateId = requestAnimationFrame(animate);
 };
 
@@ -185,6 +199,11 @@ const resetLevel = (currlevelParams) => {
 			new Target(currlevelParams.targets[i].x, currlevelParams.targets[i].y)
 		);
 	}
+
+	displayCurrLevel = true;
+	setTimeout(() => {
+		displayCurrLevel = false;
+	}, 1000);
 
 	intervelId = setInterval(() => {
 		timeLeft -= 0.5;
@@ -220,6 +239,8 @@ const removeEleInBlocks = () => {
 		candysRemoved.shift();
 		targetsRemoved.shift();
 		hitAmount -= 1;
+
+		regretSound.play();
 	}
 };
 
@@ -235,23 +256,31 @@ const onlyLastBlockRemovable = () => {
 	});
 };
 
+const drawCurrLevelCanvas = () => {
+	ctx.textAlign = "center";
+	ctx.font = "bold 200px 'Crete Round'";
+	ctx.fillStyle = "rgb(221, 173, 129, 0.9)";
+	ctx.fillText(`Level  ${currLevel}`, canvas.width / 2, canvas.height / 2 + 20);
+};
+
 const finalWinText = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.drawImage(bgWallImg, 0, 0, canvas.width, canvas.height);
 	ctx.textAlign = "center";
-	ctx.font = "bold 50px sans-serif";
-	ctx.fillStyle = "yellow";
-	ctx.fillText(`All Bugs Cleaned!`, canvas.width / 2, canvas.height / 2 - 70);
+	ctx.font = "120px 'Sedgwick Ave Display'";
+	ctx.fillStyle = "#e8c7a8";
+	ctx.fillText(`All Bugs Cleaned!`, canvas.width / 2, canvas.height / 2 - 80);
+	ctx.font = "50px 'Crete Round'";
 	ctx.fillStyle = "white";
 	ctx.fillText(
 		`Your have nailed this game`,
 		canvas.width / 2,
-		canvas.height / 2
+		canvas.height / 2 + 40
 	);
 	ctx.fillText(
-		`and passed all ${currLevel} levels`,
+		`and passed all levels.`,
 		canvas.width / 2,
-		canvas.height / 2 + 70
+		canvas.height / 2 + 100
 	);
 };
 
@@ -259,14 +288,15 @@ const gameOverText = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.drawImage(bgWallImg, 0, 0, canvas.width, canvas.height);
 	ctx.textAlign = "center";
-	ctx.font = "bold 50px sans-serif";
-	ctx.fillStyle = "yellow";
-	ctx.fillText(`Time Is Up!`, canvas.width / 2, canvas.height / 2 - 70);
+	ctx.font = "120px 'Sedgwick Ave Display'";
+	ctx.fillStyle = "#e8c7a8";
+	ctx.fillText(`Time Is Up  !`, canvas.width / 2, canvas.height / 2 - 70);
+	ctx.font = "50px 'Crete Round'";
 	ctx.fillStyle = "white";
 	ctx.fillText(
-		`You failed to clean all the bugs of level ${currLevel}.`,
+		`You failed to clean all the bugs of level  ${currLevel}.`,
 		canvas.width / 2,
-		canvas.height / 2
+		canvas.height / 2 + 70
 	);
 };
 
@@ -365,10 +395,10 @@ const drawInfoBar = () => {
 	);
 
 	ctxPanel.textAlign = "center";
-	ctxPanel.font = "bold 20px sans-serif";
+	ctxPanel.font = "bold 25px 'Crete Round'";
 	ctxPanel.fillStyle = "#ddad81";
 	ctxPanel.fillText(
-		`LEVEL ${currLevel}`,
+		`Level  ${currLevel}`,
 		gamePanel.width / 2,
 		offsetHeight / 2 + offsetSide
 	);
@@ -395,4 +425,6 @@ canvas.addEventListener("click", () => {
 	onlyLastBlockRemovable();
 
 	clickAmount += 1;
+
+	console.log(mouseX, mouseY);
 });

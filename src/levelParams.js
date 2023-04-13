@@ -1,4 +1,5 @@
 canvas = document.querySelector("#game-canvas");
+//original canvas width 1200 height 800
 
 const levelParams = [
 	{
@@ -49,6 +50,71 @@ const levelParams = [
 			{
 				x: canvas.width * 0.75,
 				y: canvas.height * 0.55,
+			},
+		],
+	},
+	{
+		level: 4,
+		limitedTime: 50,
+		limitedBlockNum: 3,
+		candyNum: 4,
+		candyX: [
+			canvas.width * 0.05,
+			canvas.width * 0.05,
+			canvas.width * 0.45,
+			canvas.width * 0.8,
+		],
+		targets: [
+			{
+				x: 210,
+				y: 265,
+			},
+			{
+				x: 365,
+				y: 661,
+			},
+			{
+				x: 724,
+				y: 511,
+			},
+			{
+				x: 665,
+				y: 638,
+			},
+		],
+	},
+	{
+		level: 5,
+		limitedTime: 60,
+		limitedBlockNum: 4,
+		candyNum: 5,
+		candyX: [
+			canvas.width * 0.1,
+			canvas.width * 0.3,
+			canvas.width * 0.65,
+			canvas.width * 0.9,
+			canvas.width * 0.9,
+		],
+		targets: [
+			{
+				x: 932,
+				y: 274,
+			},
+			{
+				x: 423,
+				y: 567,
+			},
+			{
+				x: 499,
+				y: 701,
+			},
+			{
+				x: 491,
+				y: 180,
+			},
+			{
+				x: 246,
+				y: 326,
 			},
 		],
 	},
