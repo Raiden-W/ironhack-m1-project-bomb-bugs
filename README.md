@@ -1,5 +1,9 @@
 # Bomb the Bugs
 
+Ironhack Module 1 Project.
+[Click here to play game](https://raiden-w.github.io/ironhack-m1-project-bomb-bugs/)
+
+
 ## Description
 
 Bomb-the-Bugs is a game where the player needs to use mouse click on the canvas to place some wooden logs in proper positions and also rotate them, to colide the droping bombs and change bombs' trajectory, making them target the bugs in limited time. The game has different levels setting, and the difficulty increases during the playing process. The game ends when a player passes all the levels or cannot clean the bugs in time. Player can also choose which level to start.
