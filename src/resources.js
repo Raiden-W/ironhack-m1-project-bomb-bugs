@@ -11,7 +11,7 @@ blockImg.src = "src/images/wooden-log.png";
 bombImg.src = "src/images/bomb.png";
 boomEffectImg.src = "src/images/boom.png";
 clockImg.src = "src/images/clock.png";
-pipeImg.src = "/src/images/pipe.png";
+pipeImg.src = "src/images/pipe.png";
 
 for (let i = 0; i < 6; i++) {
 	const bugImg = new Image();
@@ -31,7 +31,6 @@ bgAudio.autoplay = true;
 bgAudio.loop = true;
 
 bgAudio.volume = 0.17;
-// bgAudio.volume = 0;
 bounceSound.volume = 0.4;
 explosionSound.volume = 0.4;
 regretSound.volume = 0.3;
