@@ -89,12 +89,13 @@ ul {
 }
 
 #game-board {
+	height: 100%;
 	width: 100%;
 	padding: 0 auto;
 	margin: 0 auto;
 	display: flex;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
 }
 
 #game-info,
