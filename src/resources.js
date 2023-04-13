@@ -27,9 +27,7 @@ const explosionSound = new Audio("src/audio/explosion.mp3");
 const regretSound = new Audio("src/audio/regret.mp3");
 const whooshSound = new Audio("src/audio/whoosh.mp3");
 
-bgAudio.autoplay = true;
 bgAudio.loop = true;
-
 bgAudio.volume = 0.17;
 bounceSound.volume = 0.4;
 explosionSound.volume = 0.4;

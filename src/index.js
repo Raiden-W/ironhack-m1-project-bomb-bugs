@@ -31,6 +31,9 @@ const ctxPanel = gamePanel.getContext("2d");
 const buttonsFrameHtml = document.querySelector("#buttons-list");
 const gameIntro = document.querySelector("#game-intro");
 
+// setTimeout(() => {
+// }, 500);
+
 //responsive mouse position
 const getMousePos = (canvas, event) => {
 	const rect = canvas.getBoundingClientRect();
@@ -46,6 +49,7 @@ const startGame = () => {
 	gamePanel.style.display = "inline";
 	buttonsFrameHtml.style.display = "flex";
 
+	bgAudio.play();
 	resetLevel(levelParams[currLevel - 1]);
 
 	animate();
@@ -426,5 +430,5 @@ canvas.addEventListener("click", () => {
 
 	clickAmount += 1;
 
-	console.log(mouseX, mouseY);
+	// console.log(mouseX, mouseY);
 });

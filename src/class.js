@@ -73,7 +73,6 @@ class Block {
 		this.node.style.backgroundColor = "#5c2911";
 		this.node.style.color = "#ddad81";
 		this.node.style.border = "solid 1px #ddad81";
-		console.dir(this.node);
 		this.node.addEventListener("click", () => {
 			this.removeThis = true;
 			this.line = new Path2D();

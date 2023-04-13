@@ -4,7 +4,7 @@ canvas = document.querySelector("#game-canvas");
 const levelParams = [
 	{
 		level: 1,
-		limitedTime: 5,
+		limitedTime: 30,
 		limitedBlockNum: 1,
 		candyNum: 1,
 		candyX: [canvas.width * 0.6],
