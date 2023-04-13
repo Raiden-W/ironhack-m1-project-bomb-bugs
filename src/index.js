@@ -31,9 +31,6 @@ const ctxPanel = gamePanel.getContext("2d");
 const buttonsFrameHtml = document.querySelector("#buttons-list");
 const gameIntro = document.querySelector("#game-intro");
 
-// setTimeout(() => {
-// }, 500);
-
 //responsive mouse position
 const getMousePos = (canvas, event) => {
 	const rect = canvas.getBoundingClientRect();

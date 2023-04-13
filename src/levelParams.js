@@ -1,4 +1,3 @@
-canvas = document.querySelector("#game-canvas");
 //original canvas width 1200 height 800
 
 const levelParams = [
